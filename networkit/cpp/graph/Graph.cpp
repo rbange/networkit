@@ -15,6 +15,20 @@ namespace NetworKit {
 
 /** CONSTRUCTORS **/
 
+Graph::Graph(ReserveOnly, count n, bool weighted, bool directed) : Graph(0, weighted, directed)
+{
+	exists.reserve(n);
+	inDeg.reserve(directed ? n : 0);
+	outDeg.reserve(n);
+	inEdges.reserve(directed ? n : 0);
+	outEdges.reserve(n);
+	inEdgeWeights.reserve(weighted && directed ? n : 0);
+	outEdgeWeights.reserve(weighted ? n : 0);
+	inEdgeIds.reserve(directed ? n : 0);
+	outEdgeIds.reserve(directed ? n : 0);
+	DEBUG("Reserved ",n," space");
+}
+
 Graph::Graph(count n, bool weighted, bool directed) :
 	n(n),
 	m(0),

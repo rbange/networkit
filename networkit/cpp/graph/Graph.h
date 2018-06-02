@@ -353,6 +353,10 @@ private:
 	}
 
 public:
+	
+	struct ReserveOnly { };
+
+	static constexpr ReserveOnly reserveOnly{};
 
 	/**
 	 * Create a graph of @a n nodes. The graph has assignable edge weights if @a weighted is set to <code>true</code>.
@@ -365,6 +369,8 @@ public:
 	Graph(count n = 0, bool weighted = false, bool directed = false);
 
 	Graph(const Graph& G, bool weighted, bool directed);
+
+	Graph(ReserveOnly, count n = 0, bool weighted = false, bool directed = false);
 
 	/**
 	   * Generate a weighted graph from a list of edges. (Useful for small
