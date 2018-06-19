@@ -279,7 +279,7 @@ if not os.path.exists(".git") and not os.path.exists(".hg") and os.path.isfile("
 		os.remove("MANIFEST.in")
 	src = ["networkit/_NetworKit.cpp"]
 	build_ext_cmd = CustomStBuildExtCmd
-elif os.path.isfile("networkit/_NetworKit.pyx") and cython_available:
+elif os.path.exists("networkit/cython/") and os.path.isfile("networkit/_NetworKit.pyx") and cython_available:
 	#print("cythonize _NetworKit.pyx to _NetworKit.cpp")
 	# remove _NetworKit.cpp to make room for cython
 	#if cython_available and os.path.isfile("networkit/_NetworKit.cpp"):
