@@ -1,4 +1,6 @@
-# Module: EdgeScore
+'''
+	Module: Edgescore
+'''
 
 cdef extern from "cpp/edgescores/EdgeScore.h":
 	cdef cppclass _EdgeScore "NetworKit::EdgeScore"[T](_Algorithm):
@@ -40,7 +42,6 @@ cdef class EdgeScore(Algorithm):
 			return (<_EdgeScore[double]*>(self._this)).scores()
 		else:
 			return (<_EdgeScore[count]*>(self._this)).scores()
-
 
 cdef extern from "cpp/edgescores/ChibaNishizekiTriangleEdgeScore.h":
 	cdef cppclass _ChibaNishizekiTriangleEdgeScore "NetworKit::ChibaNishizekiTriangleEdgeScore"(_EdgeScore[count]):
@@ -145,7 +146,6 @@ cdef class EdgeScoreLinearizer(EdgeScore):
 
 	cdef bool isDoubleValue(self):
 		return True
-
 
 cdef extern from "cpp/edgescores/EdgeScoreNormalizer.h":
 	cdef cppclass _EdgeScoreNormalizer "NetworKit::EdgeScoreNormalizer"[T](_EdgeScore[double]):

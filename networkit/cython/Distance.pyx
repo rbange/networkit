@@ -1,5 +1,7 @@
+'''
+	Module: distance
+'''
 
-# Module: distances
 cdef extern from "cpp/distance/AdamicAdarDistance.h":
 	cdef cppclass _AdamicAdarDistance "NetworKit::AdamicAdarDistance":
 		_AdamicAdarDistance(const _Graph& G) except +
@@ -148,7 +150,6 @@ cdef class SSSP(Algorithm):
 	def numberOfPaths(self, t):
 		return (<_SSSP*>(self._this))._numberOfPaths(t)
 
-
 cdef extern from "cpp/distance/DynSSSP.h":
 	cdef cppclass _DynSSSP "NetworKit::DynSSSP"(_SSSP):
 		_DynSSSP(_Graph G, node source, bool storePaths, bool storeStack, node target) except +
@@ -189,7 +190,6 @@ cdef class DynSSSP(SSSP):
 
 	def setTargetNode(self, t):
 		(<_DynSSSP*>(self._this)).setTargetNode(t)
-
 
 cdef extern from "cpp/distance/BFS.h":
 	cdef cppclass _BFS "NetworKit::BFS"(_SSSP):
@@ -241,7 +241,6 @@ cdef class DynBFS(DynSSSP):
 	def __cinit__(self, Graph G, source):
 		self._G = G
 		self._this = new _DynBFS(G._this, source)
-
 
 cdef extern from "cpp/distance/Dijkstra.h":
 	cdef cppclass _Dijkstra "NetworKit::Dijkstra"(_SSSP):
@@ -295,7 +294,6 @@ cdef class DynDijkstra(DynSSSP):
 	def __cinit__(self, Graph G, source):
 		self._G = G
 		self._this = new _DynDijkstra(G._this, source)
-
 
 cdef cppclass PathCallbackWrapper:
 	void* callback
@@ -391,8 +389,6 @@ cdef class AllSimplePaths:
 			self._this.forAllSimplePaths[PathCallbackWrapper](dereference(wrapper))
 		finally:
 			del wrapper
-
-
 
 cdef extern from "cpp/distance/APSP.h":
 	cdef cppclass _APSP "NetworKit::APSP"(_Algorithm):
@@ -552,7 +548,6 @@ cdef class Diameter(Algorithm):
 	def getDiameter(self):
 		return (<_Diameter*>(self._this)).getDiameter()
 
-
 cdef extern from "cpp/distance/Eccentricity.h" namespace "NetworKit::Eccentricity":
 	pair[node, count] getValue(_Graph G, node v) except +
 
@@ -564,7 +559,6 @@ cdef class Eccentricity:
 	@staticmethod
 	def getValue(Graph G, v):
 		return getValue(G._this, v)
-
 
 cdef extern from "cpp/distance/EffectiveDiameter.h" namespace "NetworKit::EffectiveDiameter":
 	cdef cppclass _EffectiveDiameter "NetworKit::EffectiveDiameter"(_Algorithm):
@@ -598,7 +592,6 @@ cdef class EffectiveDiameter(Algorithm):
 			the effective diameter
 		"""
 		return (<_EffectiveDiameter*>(self._this)).getEffectiveDiameter()
-
 
 cdef extern from "cpp/distance/EffectiveDiameterApproximation.h" namespace "NetworKit::EffectiveDiameterApproximation":
 	cdef cppclass _EffectiveDiameterApproximation "NetworKit::EffectiveDiameterApproximation"(_Algorithm):
@@ -640,7 +633,6 @@ cdef class EffectiveDiameterApproximation(Algorithm):
 			the approximated effective diameter
 		"""
 		return (<_EffectiveDiameterApproximation*>(self._this)).getEffectiveDiameter()
-
 
 cdef extern from "cpp/distance/HopPlotApproximation.h" namespace "NetworKit::HopPlotApproximation":
 	cdef cppclass _HopPlotApproximation "NetworKit::HopPlotApproximation"(_Algorithm):
@@ -689,7 +681,6 @@ cdef class HopPlotApproximation(Algorithm):
 			result[elem.first] = elem.second
 		return result
 
-
 cdef extern from "cpp/distance/NeighborhoodFunction.h" namespace "NetworKit::NeighborhoodFunction":
 	cdef cppclass _NeighborhoodFunction "NetworKit::NeighborhoodFunction"(_Algorithm):
 		_NeighborhoodFunction(_Graph& G) except +
@@ -721,7 +712,6 @@ cdef class NeighborhoodFunction(Algorithm):
 			the i-th element denotes the number of node pairs that have a distance at most (i+1)
 		"""
 		return (<_NeighborhoodFunction*>(self._this)).getNeighborhoodFunction()
-
 
 cdef extern from "cpp/distance/NeighborhoodFunctionApproximation.h" namespace "NetworKit::NeighborhoodFunctionApproximation":
 	cdef cppclass _NeighborhoodFunctionApproximation "NetworKit::NeighborhoodFunctionApproximation"(_Algorithm):
@@ -841,14 +831,12 @@ cdef class JaccardDistance:
 	def getAttribute(self):
 		return self._this.getEdgeScores()
 
-
 cdef extern from "cpp/distance/AlgebraicDistance.h":
 	cdef cppclass _AlgebraicDistance "NetworKit::AlgebraicDistance":
 		_AlgebraicDistance(_Graph G, count numberSystems, count numberIterations, double omega, index norm, bool withEdgeScores) except +
 		void preprocess() except +
 		double distance(node, node) except +
 		vector[double] getEdgeScores() except +
-
 
 cdef class AlgebraicDistance:
 	"""
@@ -901,7 +889,6 @@ cdef extern from "cpp/distance/CommuteTimeDistance.h":
 		double distance(node, node) except +
 		double runSinglePair(node, node) except +
 		double runSingleSource(node) except +
-
 
 cdef class CommuteTimeDistance:
 	""" Computes the Euclidean Commute Time Distance between each pair of nodes for an undirected unweighted graph.

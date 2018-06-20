@@ -1,4 +1,6 @@
-# profiling
+'''
+	Module: Profiling
+'''
 
 def ranked(sample):
 	"""

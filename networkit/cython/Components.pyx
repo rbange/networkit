@@ -1,4 +1,6 @@
-# Module: properties
+'''
+	Module: components
+'''
 
 cdef extern from "cpp/components/ConnectedComponents.h":
 	cdef cppclass _ConnectedComponents "NetworKit::ConnectedComponents":
@@ -8,7 +10,6 @@ cdef extern from "cpp/components/ConnectedComponents.h":
 		count componentOfNode(node query) except +
 		_Partition getPartition() except +
 		map[index, count] getComponentSizes() except +
-
 
 cdef class ConnectedComponents:
 	""" Determines the connected components and associated values for an undirected graph.
@@ -69,7 +70,6 @@ cdef class ConnectedComponents:
 	def getComponentSizes(self):
 		return self._this.getComponentSizes()
 
-
 cdef extern from "cpp/components/ParallelConnectedComponents.h":
 	cdef cppclass _ParallelConnectedComponents "NetworKit::ParallelConnectedComponents":
 		_ParallelConnectedComponents(_Graph G, bool coarsening) except +
@@ -77,7 +77,6 @@ cdef extern from "cpp/components/ParallelConnectedComponents.h":
 		count numberOfComponents() except +
 		count componentOfNode(node query) except +
 		_Partition getPartition() except +
-
 
 cdef class ParallelConnectedComponents:
 	""" Determines the connected components and associated values for
@@ -107,7 +106,6 @@ cdef class ParallelConnectedComponents:
 	def componentOfNode(self, v):
 		return self._this.componentOfNode(v)
 
-
 cdef extern from "cpp/components/StronglyConnectedComponents.h":
 	cdef cppclass _StronglyConnectedComponents "NetworKit::StronglyConnectedComponents":
 		_StronglyConnectedComponents(_Graph G, bool iterativeAlgo) except +
@@ -117,7 +115,6 @@ cdef extern from "cpp/components/StronglyConnectedComponents.h":
 		count numberOfComponents() except +
 		count componentOfNode(node query) except +
 		_Partition getPartition() except +
-
 
 cdef class StronglyConnectedComponents:
 	""" Determines the connected components and associated values for
@@ -166,7 +163,6 @@ cdef class StronglyConnectedComponents:
 
 	def componentOfNode(self, v):
 		return self._this.componentOfNode(v)
-
 
 cdef extern from "cpp/components/WeaklyConnectedComponents.h":
 	cdef cppclass _WeaklyConnectedComponents "NetworKit::WeaklyConnectedComponents":
@@ -237,8 +233,6 @@ cdef class WeaklyConnectedComponents:
 		"""
 		return self._this.getComponents()
 
-
-
 cdef extern from "cpp/components/BiconnectedComponents.h":
 	cdef cppclass _BiconnectedComponents "NetworKit::BiconnectedComponents":
 		_BiconnectedComponents(_Graph G) except +
@@ -302,8 +296,6 @@ cdef class BiconnectedComponents:
 				A vector of vectors. Each inner vector contains all the nodes inside the component.
 		"""
 		return self._this.getComponents()
-
-
 
 cdef extern from "cpp/components/DynConnectedComponents.h":
 	cdef cppclass _DynConnectedComponents "NetworKit::DynConnectedComponents":
@@ -400,8 +392,6 @@ cdef class DynConnectedComponents:
 		for event in batch:
 			_batch.push_back(_GraphEvent(event.type, event.u, event.v, event.w))
 		self._this.updateBatch(_batch)
-
-
 
 cdef extern from "cpp/components/DynWeaklyConnectedComponents.h":
 	cdef cppclass _DynWeaklyConnectedComponents "NetworKit::DynWeaklyConnectedComponents":

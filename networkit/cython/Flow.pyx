@@ -1,4 +1,6 @@
-# Module: flows
+'''
+	Module: flow
+'''
 
 cdef extern from "cpp/flow/EdmondsKarp.h":
 	cdef cppclass _EdmondsKarp "NetworKit::EdmondsKarp":

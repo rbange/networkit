@@ -1,4 +1,6 @@
-# Module: structures
+'''
+	Module: structures
+'''
 
 cdef extern from "cpp/structures/Partition.h":
 	cdef cppclass _Partition "NetworKit::Partition":

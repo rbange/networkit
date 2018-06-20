@@ -1,8 +1,6 @@
-## Module: graph
-
-# DEPRECATED
-# TODO: replace with std::pair<double>
-
+'''
+	Module: graph
+'''
 
 cdef extern from "cpp/graph/Graph.h":
 	cdef cppclass _Graph "NetworKit::Graph":

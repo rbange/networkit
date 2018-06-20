@@ -1,4 +1,6 @@
-# Module: clique
+'''
+	Module: clique
+'''
 
 cdef extern from "cpp/clique/MaxClique.h":
 	cdef cppclass _MaxClique "NetworKit::MaxClique":

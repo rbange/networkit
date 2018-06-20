@@ -1,4 +1,6 @@
-# Module: scd
+'''
+	Module: Scd
+'''
 
 cdef extern from "cpp/scd/PageRankNibble.h":
 	cdef cppclass _PageRankNibble "NetworKit::PageRankNibble":

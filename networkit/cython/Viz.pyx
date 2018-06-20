@@ -1,4 +1,6 @@
-## Module: viz
+'''
+	Module: viz
+'''
 
 cdef extern from "cpp/viz/GraphLayoutAlgorithm.h":
 	cdef cppclass _GraphLayoutAlgorithm "NetworKit::GraphLayoutAlgorithm"[T]:
@@ -56,8 +58,6 @@ cdef class GraphLayoutAlgorithm:
 			raise RuntimeError("Error, object not properly initialized")
 		return self._this.writeKinemage(stdstring(path))
 
-
-
 cdef extern from "cpp/viz/MaxentStress.h" namespace "NetworKit":
 	enum _GraphDistance "NetworKit::MaxentStress::GraphDistance":
 		EDGE_WEIGHT,
@@ -68,7 +68,6 @@ cdef extern from "cpp/viz/MaxentStress.h" namespace "NetworKit":
 		LAMG,
 		CONJUGATE_GRADIENT_IDENTITY_PRECONDITIONER,
 		CONJUGATE_GRADIENT_DIAGONAL_PRECONDITIONER
-
 
 cdef extern from "cpp/viz/MaxentStress.h":
 	cdef cppclass _MaxentStress "NetworKit::MaxentStress" (_GraphLayoutAlgorithm[double]):
@@ -89,7 +88,6 @@ cdef extern from "cpp/viz/MaxentStress.h":
 		double getRhs() except +
 		double getApproxEntropyTerm() except +
 		double getSolveTime() except +
-
 
 cdef class MaxentStress (GraphLayoutAlgorithm):
 

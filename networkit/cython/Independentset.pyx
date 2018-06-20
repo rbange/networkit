@@ -1,3 +1,7 @@
+'''
+	Module: Graphio
+'''
+
 cdef extern from "cpp/independentset/Luby.h":
 	cdef cppclass _Luby "NetworKit::Luby":
 		_Luby() except +

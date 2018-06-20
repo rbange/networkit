@@ -1,3 +1,7 @@
+'''
+	Module: Misc
+	Collection of several isolated classes
+'''
 cdef extern from "cpp/correlation/Assortativity.h":
 	cdef cppclass _Assortativity "NetworKit::Assortativity"(_Algorithm):
 		_Assortativity(_Graph, vector[double]) except +
@@ -22,7 +26,6 @@ cdef class Assortativity(Algorithm):
 
 	def getCoefficient(self):
 		return (<_Assortativity*>(self._this)).getCoefficient()
-
 
 cdef class JaccardSimilarityAttributizer:
 	"""
@@ -67,7 +70,6 @@ def gini(values):
 		area += height - value / 2.
 	fair_area = height * len(values) / 2
 	return (fair_area - area) / fair_area
-
 
 # simulation
 cdef extern from "cpp/simulation/EpidemicSimulationSEIR.h":

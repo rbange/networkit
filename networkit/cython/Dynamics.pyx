@@ -1,5 +1,6 @@
-
-# Module: dynamic
+'''
+	Module: dynamic
+'''
 
 cdef extern from "cpp/dynamics/GraphDifference.h":
 	cdef cppclass _GraphDifference "NetworKit::GraphDifference"(_Algorithm):
@@ -186,7 +187,6 @@ cdef class GraphEvent:
 	def __repr__(self):
 		return self.toString()
 
-
 cdef extern from "cpp/dynamics/DGSStreamParser.h":
 	cdef cppclass _DGSStreamParser "NetworKit::DGSStreamParser":
 		_DGSStreamParser(string path, bool mapped, node baseIndex) except +
@@ -204,11 +204,9 @@ cdef class DGSStreamParser:
 	def getStream(self):
 		return [GraphEvent(ev.type, ev.u, ev.v, ev.w) for ev in self._this.getStream()]
 
-
 cdef extern from "cpp/dynamics/DGSWriter.h":
 	cdef cppclass _DGSWriter "NetworKit::DGSWriter":
 		void write(vector[_GraphEvent] stream, string path) except +
-
 
 cdef class DGSWriter:
 	cdef _DGSWriter* _this

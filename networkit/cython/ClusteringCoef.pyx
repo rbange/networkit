@@ -1,3 +1,7 @@
+'''
+	Module: ClusteringCoefficient
+'''
+
 cdef extern from "cpp/global/ClusteringCoefficient.h" namespace "NetworKit::ClusteringCoefficient":
 		double avgLocal(_Graph G, bool turbo) nogil except +
 		double sequentialAvgLocal(_Graph G) nogil except +

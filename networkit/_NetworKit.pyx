@@ -1,4 +1,5 @@
 # Networkit core
+include "cython/Import.pyx"
 include "cython/Global.pyx"
 include "cython/Auxiliary.pyx"
 include "cython/Graph.pyx"

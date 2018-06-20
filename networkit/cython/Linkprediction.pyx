@@ -1,4 +1,6 @@
-# Module: linkprediction
+'''
+	Module: linkprediction
+'''
 
 cdef extern from "cpp/linkprediction/LinkPredictor.h":
 	cdef cppclass _LinkPredictor "NetworKit::LinkPredictor":

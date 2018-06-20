@@ -1,4 +1,6 @@
-# Module: sparsification
+'''
+	Module: sparsification
+'''
 
 cdef extern from "cpp/sparsification/SimmelianOverlapScore.h":
 	cdef cppclass _SimmelianOverlapScore "NetworKit::SimmelianOverlapScore"(_EdgeScore[double]):

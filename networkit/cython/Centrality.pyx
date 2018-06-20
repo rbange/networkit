@@ -1,4 +1,6 @@
-# Module: centrality
+'''
+	Module: centrality
+'''
 
 cdef extern from "cpp/centrality/Centrality.h":
 	cdef cppclass _Centrality "NetworKit::Centrality"(_Algorithm):
@@ -8,7 +10,6 @@ cdef extern from "cpp/centrality/Centrality.h":
 		double score(node) except +
 		double maximum() except +
 		double centralization() except +
-
 
 cdef class Centrality(Algorithm):
 	""" Abstract base class for centrality measures"""
@@ -90,7 +91,6 @@ cdef extern from "cpp/centrality/TopCloseness.h":
 		vector[node] topkNodesList(bool) except +
 		vector[edgeweight] topkScoresList(bool) except +
 
-
 cdef class TopCloseness:
 	"""
 	Finds the top k nodes with highest closeness centrality faster than computing it for all nodes, based on "Computing Top-k Closeness Centrality Faster in Unweighted Graphs", Bergamini et al., ALENEX16.
@@ -158,14 +158,12 @@ cdef class TopCloseness:
 		"""
 		return self._this.topkScoresList(includeTrail)
 
-
 cdef extern from "cpp/centrality/TopHarmonicCloseness.h":
 	cdef cppclass _TopHarmonicCloseness "NetworKit::TopHarmonicCloseness":
 		_TopHarmonicCloseness(_Graph G, count, bool) except +
 		void run() except +
 		vector[node] topkNodesList(bool) except +
 		vector[edgeweight] topkScoresList(bool) except +
-
 
 cdef class TopHarmonicCloseness:
 	""" Finds the top k nodes with highest harmonic closeness centrality faster
@@ -239,7 +237,6 @@ cdef class TopHarmonicCloseness:
 			The k highest closeness harmonic scores.
 		"""
 		return self._this.topkScoresList(includeTrail)
-
 
 cdef extern from "cpp/centrality/DynTopHarmonicCloseness.h":
 	cdef cppclass _DynTopHarmonicCloseness "NetworKit::DynTopHarmonicCloseness":
@@ -361,15 +358,12 @@ cdef class DynTopHarmonicCloseness:
 			_batch.push_back(_GraphEvent(ev.type, ev.u, ev.v, ev.w))
 		self._this.updateBatch(_batch)
 
-
-
 cdef extern from "cpp/centrality/GroupDegree.h":
 	cdef cppclass _GroupDegree "NetworKit::GroupDegree":
 		_GroupDegree(_Graph G, count, bool) except +
 		void run() except +
 		vector[node] groupMaxDegree() except +
 		count getScore() except +
-
 
 cdef class GroupDegree:
 	"""
@@ -434,15 +428,12 @@ cdef class GroupDegree:
 		"""
 		return self._this.getScore()
 
-
-
 cdef extern from "cpp/centrality/GroupCloseness.h":
 	cdef cppclass _GroupCloseness "NetworKit::GroupCloseness":
 		_GroupCloseness(_Graph G, count, count) except +
 		void run() except +
 		vector[node] groupMaxCloseness() except +
 		double computeFarness(vector[node], count) except +
-
 
 cdef class GroupCloseness:
 	"""
@@ -487,8 +478,6 @@ cdef class GroupCloseness:
 	def computeFarness(self, S, H=0):
 		return self._this.computeFarness(S, H)
 
-
-
 cdef extern from "cpp/centrality/DegreeCentrality.h":
 	cdef cppclass _DegreeCentrality "NetworKit::DegreeCentrality" (_Centrality):
 		_DegreeCentrality(_Graph, bool normalized, bool outdeg, bool ignoreSelfLoops) except +
@@ -514,8 +503,6 @@ cdef class DegreeCentrality(Centrality):
 	def __cinit__(self, Graph G, bool normalized=False, bool outDeg = True, bool ignoreSelfLoops=True):
 		self._G = G
 		self._this = new _DegreeCentrality(G._this, normalized, outDeg, ignoreSelfLoops)
-
-
 
 cdef extern from "cpp/centrality/Betweenness.h":
 	cdef cppclass _Betweenness "NetworKit::Betweenness" (_Centrality):
@@ -555,7 +542,6 @@ cdef class Betweenness(Centrality):
 		"""
 		return (<_Betweenness*>(self._this)).edgeScores()
 
-
 cdef extern from "cpp/centrality/Closeness.h":
 	cdef cppclass _Closeness "NetworKit::Closeness" (_Centrality):
 		_Closeness(_Graph, bool, bool) except +
@@ -581,7 +567,6 @@ cdef class Closeness(Centrality):
 	def __cinit__(self, Graph G, normalized=True, checkConnectedness=True):
 		self._G = G
 		self._this = new _Closeness(G._this, normalized, checkConnectedness)
-
 
 cdef extern from "cpp/centrality/HarmonicCloseness.h":
 	cdef cppclass _HarmonicCloseness "NetworKit::HarmonicCloseness" (_Centrality):
@@ -611,7 +596,6 @@ cdef class HarmonicCloseness(Centrality):
 		self._G = G
 		self._this = new _HarmonicCloseness(G._this, normalized)
 
-
 cdef extern from "cpp/centrality/KPathCentrality.h":
 	cdef cppclass _KPathCentrality "NetworKit::KPathCentrality" (_Centrality):
 		_KPathCentrality(_Graph, double, count) except +
@@ -636,7 +620,6 @@ cdef class KPathCentrality(Centrality):
 	def __cinit__(self, Graph G, alpha=0.2, k=0):
 		self._G = G
 		self._this = new _KPathCentrality(G._this, alpha, k)
-
 
 cdef extern from "cpp/centrality/KatzCentrality.h":
 	cdef cppclass _KatzCentrality "NetworKit::KatzCentrality" (_Centrality):
@@ -706,11 +689,9 @@ cdef class ApproxBetweenness(Centrality):
 	def numberOfSamples(self):
 		return (<_ApproxBetweenness*>(self._this)).numberOfSamples()
 
-
 cdef extern from "cpp/centrality/EstimateBetweenness.h":
 	cdef cppclass _EstimateBetweenness"NetworKit::EstimateBetweenness" (_Centrality):
 		_EstimateBetweenness(_Graph, count, bool, bool) except +
-
 
 cdef class EstimateBetweenness(Centrality):
 	""" Estimation of betweenness centrality according to algorithm described in
@@ -740,7 +721,6 @@ cdef class EstimateBetweenness(Centrality):
 	def __cinit__(self, Graph G, nSamples, normalized=False, parallel=False):
 		self._G = G
 		self._this = new _EstimateBetweenness(G._this, nSamples, normalized, parallel)
-
 
 cdef class ApproxBetweenness2(Centrality):
 	""" DEPRECATED: Use EstimateBetweenness instead.
@@ -775,7 +755,6 @@ cdef class ApproxBetweenness2(Centrality):
 		self._G = G
 		self._this = new _EstimateBetweenness(G._this, nSamples, normalized, parallel)
 
-
 cdef extern from "cpp/centrality/ApproxCloseness.h":
 	enum _ClosenessType "NetworKit::ApproxCloseness::CLOSENESS_TYPE":
 		INBOUND,
@@ -787,8 +766,6 @@ cdef extern from "cpp/centrality/ApproxCloseness.h":
 		_ClosenessType type
 		_ApproxCloseness(_Graph, count, float, bool, _ClosenessType type) except +
 		vector[double] getSquareErrorEstimates() except +
-
-
 
 cdef class ApproxCloseness(Centrality):
 	""" Approximation of closeness centrality according to algorithm described in
@@ -834,8 +811,6 @@ cdef class ApproxCloseness(Centrality):
 		"""
 		return (<_ApproxCloseness*>(self._this)).getSquareErrorEstimates()
 
-
-
 cdef extern from "cpp/centrality/PageRank.h":
 	cdef cppclass _PageRank "NetworKit::PageRank" (_Centrality):
 		_PageRank(_Graph, double damp, double tol) except +
@@ -858,8 +833,6 @@ cdef class PageRank(Centrality):
 	def __cinit__(self, Graph G, double damp=0.85, double tol=1e-9):
 		self._G = G
 		self._this = new _PageRank(G._this, damp, tol)
-
-
 
 cdef extern from "cpp/centrality/EigenvectorCentrality.h":
 	cdef cppclass _EigenvectorCentrality "NetworKit::EigenvectorCentrality" (_Centrality):
@@ -884,7 +857,6 @@ cdef class EigenvectorCentrality(Centrality):
 	def __cinit__(self, Graph G, double tol=1e-9):
 		self._G = G
 		self._this = new _EigenvectorCentrality(G._this, tol)
-
 
 cdef extern from "cpp/centrality/CoreDecomposition.h":
 	cdef cppclass _CoreDecomposition "NetworKit::CoreDecomposition" (_Centrality):
@@ -994,7 +966,6 @@ cdef class LocalClusteringCoefficient(Centrality):
 		self._G = G
 		self._this = new _LocalClusteringCoefficient(G._this, turbo)
 
-
 cdef extern from "cpp/centrality/Sfigality.h":
 	cdef cppclass _Sfigality "NetworKit::Sfigality" (_Centrality):
 		_Sfigality(_Graph) except +
@@ -1014,8 +985,6 @@ cdef class Sfigality(Centrality):
 	def __cinit__(self, Graph G):
 		self._G = G
 		self._this = new _Sfigality(G._this)
-
-
 
 cdef extern from "cpp/centrality/DynApproxBetweenness.h":
 	cdef cppclass _DynApproxBetweenness "NetworKit::DynApproxBetweenness":
@@ -1226,7 +1195,6 @@ cdef class DynBetweenness:
 			A vector of pairs.
 		"""
 		return self._this.ranking()
-
 
 cdef extern from "cpp/centrality/DynBetweennessOneNode.h":
 	cdef cppclass _DynBetweennessOneNode "NetworKit::DynBetweennessOneNode":

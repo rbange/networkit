@@ -1,4 +1,6 @@
-# matching
+'''
+	Module: Matching
+'''
 
 cdef extern from "cpp/matching/Matching.h":
 	cdef cppclass _Matching "NetworKit::Matching":
@@ -99,7 +101,6 @@ cdef class Matcher(Algorithm):
 		if self._this == NULL:
 			raise RuntimeError("Error, object not properly initialized")
 		return Matching().setThis((<_Matcher*>(self._this)).getMatching())
-
 
 cdef extern from "cpp/matching/PathGrowingMatcher.h":
 	cdef cppclass _PathGrowingMatcher "NetworKit::PathGrowingMatcher"(_Matcher):

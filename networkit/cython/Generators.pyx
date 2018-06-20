@@ -1,4 +1,6 @@
-# Module: generators
+'''
+	Module: generators
+'''
 
 cdef extern from "cpp/generators/BarabasiAlbertGenerator.h":
 	cdef cppclass _BarabasiAlbertGenerator "NetworKit::BarabasiAlbertGenerator":
@@ -43,7 +45,6 @@ cdef class BarabasiAlbertGenerator:
 		(n, m) = G.size()
 		k = math.floor(m / n)
 		return cls(nMax=scale * n, k=k, n0=k)
-
 
 cdef extern from "cpp/generators/PubWebGenerator.h":
 	cdef cppclass _PubWebGenerator "NetworKit::PubWebGenerator":
@@ -90,7 +91,6 @@ cdef class PubWebGenerator:
 
 	def generate(self):
 		return Graph(0).setThis(self._this.generate())
-
 
 cdef extern from "cpp/generators/ErdosRenyiGenerator.h":
 	cdef cppclass _ErdosRenyiGenerator "NetworKit::ErdosRenyiGenerator":
@@ -177,7 +177,6 @@ cdef class DorogovtsevMendesGenerator:
 	def fit(cls, Graph G, scale=1):
 		return cls(scale * G.numberOfNodes())
 
-
 cdef extern from "cpp/generators/RegularRingLatticeGenerator.h":
 	cdef cppclass _RegularRingLatticeGenerator "NetworKit::RegularRingLatticeGenerator":
 		_RegularRingLatticeGenerator(count nNodes, count nNeighbors) except +
@@ -214,7 +213,6 @@ cdef class RegularRingLatticeGenerator:
 			The generated graph.
 		"""
 		return Graph(0).setThis(self._this.generate())
-
 
 cdef extern from "cpp/generators/WattsStrogatzGenerator.h":
 	cdef cppclass _WattsStrogatzGenerator "NetworKit::WattsStrogatzGenerator":
@@ -255,7 +253,6 @@ cdef class WattsStrogatzGenerator:
 			The generated graph.
 		"""
 		return Graph(0).setThis(self._this.generate())
-
 
 cdef extern from "cpp/generators/ClusteredRandomGraphGenerator.h":
 	cdef cppclass _ClusteredRandomGraphGenerator "NetworKit::ClusteredRandomGraphGenerator":
@@ -313,7 +310,6 @@ cdef class ClusteredRandomGraphGenerator:
 		"""
 		return Partition().setThis(self._this.getCommunities())
 
-
 cdef extern from "cpp/generators/ChungLuGenerator.h":
 	cdef cppclass _ChungLuGenerator "NetworKit::ChungLuGenerator":
 		_ChungLuGenerator(vector[count] degreeSequence) except +
@@ -354,7 +350,6 @@ cdef class ChungLuGenerator:
 		(n, m) = G.size()
 		degSeq = DegreeCentrality(G).run().scores()
 		return cls(degSeq * scale)
-
 
 cdef extern from "cpp/generators/HavelHakimiGenerator.h":
 	cdef cppclass _HavelHakimiGenerator "NetworKit::HavelHakimiGenerator":
@@ -476,7 +471,6 @@ cdef class EdgeSwitchingMarkovChainGenerator:
 		degSeq = DegreeCentrality(G).run().scores()
 		return cls(degSeq * scale, ignoreIfRealizable=True)
 
-
 cdef extern from "cpp/generators/HyperbolicGenerator.h":
 	cdef cppclass _HyperbolicGenerator "NetworKit::HyperbolicGenerator":
 		# TODO: revert to count when cython issue fixed
@@ -551,7 +545,6 @@ For a temperature of 0, the model resembles a unit-disk model in hyperbolic spac
 		(n, m) = G.size()
 		k = 2 * (m / n)
 		return cls(n * scale, k, gamma)
-
 
 cdef extern from "cpp/generators/RmatGenerator.h":
 	cdef cppclass _RmatGenerator "NetworKit::RmatGenerator":
@@ -1090,36 +1083,10 @@ cdef class LFRGenerator(Algorithm):
 			gen.setMu([1.0 - x for x in localCoverage] * scale)
 		return gen
 
-
-# cdef extern from "cpp/generators/MultiscaleGenerator.h":
-# 	cdef cppclass _MultiscaleGenerator "NetworKit::MultiscaleGenerator":
-# 		_MultiscaleGenerator(_Graph O) except +
-# 		_Graph generate() except +
-#
-#
-# cdef class MultiscaleGenerator:
-# 	"""
-# 	TODO:
-# 	"""
-# 	cdef _MultiscaleGenerator *_this
-# 	cdef Graph O	# store reference to input graph to not let it be garbage-collection
-#
-# 	def __cinit__(self, Graph O):
-# 		self._this = new _MultiscaleGenerator(O._this)
-# 		self.O = O
-#
-# 	def generate(self):
-# 		return Graph(0).setThis(self._this.generate())
-#
-# 	@classmethod
-# 	def fit(cls, Graph G):
-# 		return cls(G)
-
 cdef extern from "cpp/generators/DynamicPathGenerator.h":
 	cdef cppclass _DynamicPathGenerator "NetworKit::DynamicPathGenerator":
 		_DynamicPathGenerator() except +
 		vector[_GraphEvent] generate(count nSteps) except +
-
 
 cdef class DynamicPathGenerator:
 	""" Example dynamic graph generator: Generates a dynamically growing path. """
@@ -1134,12 +1101,10 @@ cdef class DynamicPathGenerator:
 	def generate(self, nSteps):
 		return [GraphEvent(ev.type, ev.u, ev.v, ev.w) for ev in self._this.generate(nSteps)]
 
-
 cdef extern from "cpp/generators/DynamicDorogovtsevMendesGenerator.h":
 	cdef cppclass _DynamicDorogovtsevMendesGenerator "NetworKit::DynamicDorogovtsevMendesGenerator":
 		_DynamicDorogovtsevMendesGenerator() except +
 		vector[_GraphEvent] generate(count nSteps) except +
-
 
 cdef class DynamicDorogovtsevMendesGenerator:
 	""" Generates a graph according to the Dorogovtsev-Mendes model.
@@ -1166,15 +1131,12 @@ cdef class DynamicDorogovtsevMendesGenerator:
 		"""
 		return [GraphEvent(ev.type, ev.u, ev.v, ev.w) for ev in self._this.generate(nSteps)]
 
-
-
 cdef extern from "cpp/generators/DynamicPubWebGenerator.h":
 	cdef cppclass _DynamicPubWebGenerator "NetworKit::DynamicPubWebGenerator":
 		_DynamicPubWebGenerator(count numNodes, count numberOfDenseAreas,
 			float neighborhoodRadius, count maxNumberOfNeighbors) except +
 		vector[_GraphEvent] generate(count nSteps) except +
 		_Graph getGraph() except +
-
 
 cdef class DynamicPubWebGenerator:
 	cdef _DynamicPubWebGenerator* _this
@@ -1204,7 +1166,6 @@ cdef extern from "cpp/generators/DynamicHyperbolicGenerator.h":
 		vector[_GraphEvent] generate(count nSteps) except +
 		_Graph getGraph() except +
 		vector[Point[float]] getCoordinates() except +
-
 
 cdef class DynamicHyperbolicGenerator:
 	cdef _DynamicHyperbolicGenerator* _this
@@ -1251,14 +1212,11 @@ cdef class DynamicHyperbolicGenerator:
 		""" Get coordinates in the Poincare disk"""
 		return [(p[0], p[1]) for p in self._this.getCoordinates()]
 
-
-
 cdef extern from "cpp/generators/DynamicForestFireGenerator.h":
 	cdef cppclass _DynamicForestFireGenerator "NetworKit::DynamicForestFireGenerator":
 		_DynamicForestFireGenerator(double p, bool directed, double r) except +
 		vector[_GraphEvent] generate(count nSteps) except +
 		_Graph getGraph() except +
-
 
 cdef class DynamicForestFireGenerator:
 	""" Generates a graph according to the forest fire model.

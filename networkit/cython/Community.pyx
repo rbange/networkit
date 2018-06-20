@@ -1,4 +1,6 @@
-# Module: community
+'''
+	Module: community
+'''
 
 # Fused type for methods that accept both a partition and a cover
 ctypedef fused PartitionCover:
@@ -167,7 +169,6 @@ cdef class Coverage:
 	def getQuality(self, Partition zeta, Graph G):
 		return self._this.getQuality(zeta._this, G._this)
 
-
 cdef extern from "cpp/community/EdgeCut.h":
 	cdef cppclass _EdgeCut "NetworKit::EdgeCut":
 		_EdgeCut() except +
@@ -180,12 +181,10 @@ cdef class EdgeCut:
 	def getQuality(self, Partition zeta, Graph G):
 		return self._this.getQuality(zeta._this, G._this)
 
-
 cdef extern from "cpp/community/Modularity.h":
 	cdef cppclass _Modularity "NetworKit::Modularity":
 		_Modularity() except +
 		double getQuality(_Partition _zeta, _Graph _G) nogil except +
-
 
 cdef class Modularity:
 	"""	Modularity is a quality index for community detection.
@@ -249,12 +248,10 @@ cdef class HubDominance:
 		"""
 		return self._this.getQuality(zeta._this, G._this)
 
-
 cdef extern from "cpp/community/CommunityDetectionAlgorithm.h":
 	cdef cppclass _CommunityDetectionAlgorithm "NetworKit::CommunityDetectionAlgorithm"(_Algorithm):
 		_CommunityDetectionAlgorithm(const _Graph &_G)
 		_Partition getPartition() except +
-
 
 cdef class CommunityDetector(Algorithm):
 	""" Abstract base class for static community detection algorithms """
@@ -285,7 +282,6 @@ cdef extern from "cpp/community/PLP.h":
 		_PLP(_Graph _G, _Partition baseClustering, count updateThreshold) except +
 		count numberOfIterations() except +
 		vector[count] getTiming() except +
-
 
 cdef class PLP(CommunityDetector):
 	""" Parallel label propagation for community detection:
@@ -365,8 +361,6 @@ cdef class LPDegreeOrdered(CommunityDetector):
 		"""
 		return (<_LPDegreeOrdered*>(self._this)).numberOfIterations()
 
-
-
 cdef extern from "cpp/community/PLM.h":
 	cdef cppclass _PLM "NetworKit::PLM"(_CommunityDetectionAlgorithm):
 		_PLM(_Graph _G) except +
@@ -376,7 +370,6 @@ cdef extern from "cpp/community/PLM.h":
 cdef extern from "cpp/community/PLM.h" namespace "NetworKit::PLM":
 	pair[_Graph, vector[node]] PLM_coarsen "NetworKit::PLM::coarsen" (const _Graph& G, const _Partition& zeta) except +
 	_Partition PLM_prolong "NetworKit::PLM::prolong"(const _Graph& Gcoarse, const _Partition& zetaCoarse, const _Graph& Gfine, vector[node] nodeToMetaNode) except +
-
 
 cdef class PLM(CommunityDetector):
 	""" Parallel Louvain Method - the Louvain method, optionally extended to
@@ -429,7 +422,6 @@ cdef extern from "cpp/community/CutClustering.h":
 cdef extern from "cpp/community/CutClustering.h" namespace "NetworKit::CutClustering":
 	map[double, _Partition] CutClustering_getClusterHierarchy "NetworKit::CutClustering::getClusterHierarchy"(const _Graph& G) nogil except +
 
-
 cdef class CutClustering(CommunityDetector):
 	"""
 	Cut clustering algorithm as defined in
@@ -481,7 +473,6 @@ cdef class DissimilarityMeasure:
 	# TODO: use conventional class design of parametrized constructor, run-method and getters
 	pass
 
-
 cdef extern from "cpp/community/NodeStructuralRandMeasure.h":
 	cdef cppclass _NodeStructuralRandMeasure "NetworKit::NodeStructuralRandMeasure":
 		_NodeStructuralRandMeasure() except +
@@ -499,7 +490,6 @@ cdef class NodeStructuralRandMeasure(DissimilarityMeasure):
 			ret = self._this.getDissimilarity(G._this, first._this, second._this)
 		return ret
 
-
 cdef extern from "cpp/community/GraphStructuralRandMeasure.h":
 	cdef cppclass _GraphStructuralRandMeasure "NetworKit::GraphStructuralRandMeasure":
 		_GraphStructuralRandMeasure() except +
@@ -516,7 +506,6 @@ cdef class GraphStructuralRandMeasure(DissimilarityMeasure):
 		with nogil:
 			ret = self._this.getDissimilarity(G._this, first._this, second._this)
 		return ret
-
 
 cdef extern from "cpp/community/JaccardMeasure.h":
 	cdef cppclass _JaccardMeasure "NetworKit::JaccardMeasure":
@@ -719,11 +708,9 @@ cdef class LocalPartitionEvaluation(LocalCommunityEvaluation):
 		self._G = None
 		self._P = None
 
-
 cdef extern from "cpp/community/LocalCoverEvaluation.h":
 	cdef cppclass _LocalCoverEvaluation "NetworKit::LocalCoverEvaluation"(_LocalCommunityEvaluation):
 		pass
-
 
 cdef class LocalCoverEvaluation(LocalCommunityEvaluation):
 	"""
@@ -777,7 +764,6 @@ cdef class IntrapartitionDensity(LocalPartitionEvaluation):
 		if self._this == NULL:
 			raise RuntimeError("Error, object not properly initialized")
 		return (<_IntrapartitionDensity*>(self._this)).getGlobal()
-
 
 cdef extern from "cpp/community/IsolatedInterpartitionConductance.h":
 	cdef cppclass _IsolatedInterpartitionConductance "NetworKit::IsolatedInterpartitionConductance"(_LocalPartitionEvaluation):

@@ -1,4 +1,6 @@
-# Function definitions
+'''
+	Module: auxiliary
+'''
 
 cdef extern from "cpp/auxiliary/Parallel.h" namespace "Aux::Parallel":
 	void sort[Iter](Iter begin, Iter end) nogil

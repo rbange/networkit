@@ -1,4 +1,6 @@
-# Module: graphio
+'''
+	Module: graphio
+'''
 
 cdef extern from "cpp/io/GraphReader.h":
 	cdef cppclass _GraphReader "NetworKit::GraphReader":
@@ -53,13 +55,11 @@ cdef class GraphToolBinaryReader(GraphReader):
 	def __cinit__(self):
 		self._this = new _GraphToolBinaryReader()
 
-
 cdef extern from "cpp/io/EdgeListReader.h":
 	cdef cppclass _EdgeListReader "NetworKit::EdgeListReader"(_GraphReader):
 		_EdgeListReader() except +
 		_EdgeListReader(char separator, node firstNode, string commentPrefix, bool continuous, bool directed)
 		map[string,node] getNodeMap() except +
-
 
 cdef class EdgeListReader(GraphReader):
 	""" Reads a file in an edge list format.
@@ -106,7 +106,6 @@ cdef extern from "cpp/io/METISGraphWriter.h":
 		_METISGraphWriter() except +
 		void write(_Graph G, string path) nogil except +
 
-
 cdef class METISGraphWriter:
 	""" Writes graphs in the METIS format"""
 	cdef _METISGraphWriter _this
@@ -122,7 +121,6 @@ cdef extern from "cpp/io/GraphToolBinaryWriter.h":
 		_GraphToolBinaryWriter() except +
 		void write(_Graph G, string path) nogil except +
 
-
 cdef class GraphToolBinaryWriter:
 	""" Reads the binary file format defined by graph-tool[1].
 		[1]: http://graph-tool.skewed.de/static/doc/gt_format.html
@@ -135,12 +133,10 @@ cdef class GraphToolBinaryWriter:
 		with nogil:
 			self._this.write(G._this, cpath)
 
-
 cdef extern from "cpp/io/DotGraphWriter.h":
 	cdef cppclass _DotGraphWriter "NetworKit::DotGraphWriter":
 		_DotGraphWriter() except +
 		void write(_Graph G, string path) nogil except +
-
 
 cdef class DotGraphWriter:
 	""" Writes graphs in the .dot/GraphViz format"""
@@ -152,12 +148,10 @@ cdef class DotGraphWriter:
 		with nogil:
 			self._this.write(G._this, cpath)
 
-
 cdef extern from "cpp/io/GMLGraphWriter.h":
 	cdef cppclass _GMLGraphWriter "NetworKit::GMLGraphWriter":
 		_GMLGraphWriter() except +
 		void write(_Graph G, string path) nogil except +
-
 
 cdef class GMLGraphWriter:
 	""" Writes a graph and its coordinates as a GML file.[1]
@@ -169,7 +163,6 @@ cdef class GMLGraphWriter:
 		cdef string cpath = stdstring(path)
 		with nogil:
 			self._this.write(G._this, cpath)
-
 
 cdef extern from "cpp/io/EdgeListWriter.h":
 	cdef cppclass _EdgeListWriter "NetworKit::EdgeListWriter":
@@ -201,13 +194,10 @@ cdef class EdgeListWriter:
 		with nogil:
 			self._this.write(G._this, cpath)
 
-
-
 cdef extern from "cpp/io/LineFileReader.h":
 	cdef cppclass _LineFileReader "NetworKit::LineFileReader":
 		_LineFileReader() except +
 		vector[string] read(string path)
-
 
 cdef class LineFileReader:
 	""" Reads a file and puts each line in a list of strings """
@@ -215,7 +205,6 @@ cdef class LineFileReader:
 
 	def read(self, path):
 		return self._this.read(stdstring(path))
-
 
 cdef extern from "cpp/io/SNAPGraphWriter.h":
 	cdef cppclass _SNAPGraphWriter "NetworKit::SNAPGraphWriter":
@@ -232,7 +221,6 @@ cdef class SNAPGraphWriter:
 		cdef string cpath = stdstring(path)
 		with nogil:
 			self._this.write(G._this, cpath)
-
 
 cdef extern from "cpp/io/SNAPGraphReader.h":
 	cdef cppclass _SNAPGraphReader "NetworKit::SNAPGraphReader"(_GraphReader):
@@ -253,12 +241,10 @@ cdef class SNAPGraphReader(GraphReader):
 			result.append((elem.first,elem.second))
 		return result
 
-
 cdef extern from "cpp/io/PartitionReader.h":
 	cdef cppclass _PartitionReader "NetworKit::PartitionReader":
 		_PartitionReader() except +
 		_Partition read(string path) except +
-
 
 cdef class PartitionReader:
 	""" Reads a partition from a file.
@@ -269,12 +255,10 @@ cdef class PartitionReader:
 	def read(self, path):
 		return Partition().setThis(self._this.read(stdstring(path)))
 
-
 cdef extern from "cpp/io/PartitionWriter.h":
 	cdef cppclass _PartitionWriter "NetworKit::PartitionWriter":
 		_PartitionWriter() except +
 		void write(_Partition, string path) nogil except +
-
 
 cdef class PartitionWriter:
 	""" Writes a partition to a file.
@@ -287,13 +271,11 @@ cdef class PartitionWriter:
 		with nogil:
 			self._this.write(zeta._this, cpath)
 
-
 cdef extern from "cpp/io/EdgeListPartitionReader.h":
 	cdef cppclass _EdgeListPartitionReader "NetworKit::EdgeListPartitionReader":
 		_EdgeListPartitionReader() except +
 		_EdgeListPartitionReader(node firstNode, char sepChar) except +
 		_Partition read(string path) except +
-
 
 cdef class EdgeListPartitionReader:
 	""" Reads a partition from an edge list type of file
@@ -323,25 +305,6 @@ cdef class SNAPEdgeListPartitionReader:
 			cNodeMap[key] = val
 		return Cover().setThis(self._this.read(stdstring(path), cNodeMap, G._this))
 
-#	def readWithInfo(self,path,nNodes):
-#		return Partition().setThis(self._this.readWithInfo(stdstring(path),nNodes))
-
-#not existing yet, maybe in the future?
-#cdef extern from "cpp/io/EdgeListPartitionWriter.h":
-#	cdef cppclass _EdgeListPartitionWriter "NetworKit::EdgeListPartitionWriter":
-#		_EdgeListPartitionWriter() except +
-#		void write(_Partition, string path)
-
-
-#cdef class EdgeListPartitionWriter:
-#	""" Writes a partition to a edge list type of file.
-#		File format: a line contains the element id and the subsed id of the element.
-#	 """
-#	cdef _EdgeListPartitionWriter _this
-
-#	def Write(self, Partition zeta, path):
-#		self._this.write(zeta._this, stdstring(path))
-
 cdef extern from "cpp/io/CoverReader.h":
 	cdef cppclass _CoverReader "NetworKit::CoverReader":
 		_CoverReader() except +
@@ -361,7 +324,6 @@ cdef extern from "cpp/io/CoverWriter.h":
 		_CoverWriter() except +
 		void write(_Cover, string path) nogil except +
 
-
 cdef class CoverWriter:
 	""" Writes a partition to a file.
 		File format: each line contains the space-separated node ids of a community
@@ -378,7 +340,6 @@ cdef extern from "cpp/io/EdgeListCoverReader.h":
 		_EdgeListCoverReader() except +
 		_EdgeListCoverReader(node firstNode) except +
 		_Cover read(string path, _Graph G) except +
-
 
 cdef class EdgeListCoverReader:
 	""" Reads a cover from an edge list type of file

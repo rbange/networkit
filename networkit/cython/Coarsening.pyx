@@ -1,4 +1,6 @@
-# Module: coarsening
+'''
+	Module: Coarsening
+'''
 
 cdef extern from "cpp/coarsening/GraphCoarsening.h":
 	cdef cppclass _GraphCoarsening "NetworKit::GraphCoarsening"(_Algorithm):
@@ -41,11 +43,9 @@ cdef class GraphCoarsening(Algorithm):
 	def getCoarseToFineNodeMapping(self):
 		return (<_GraphCoarsening*>(self._this)).getCoarseToFineNodeMapping()
 
-
 cdef extern from "cpp/coarsening/ParallelPartitionCoarsening.h":
 	cdef cppclass _ParallelPartitionCoarsening "NetworKit::ParallelPartitionCoarsening"(_GraphCoarsening):
 		_ParallelPartitionCoarsening(_Graph, _Partition, bool) except +
-
 
 cdef class ParallelPartitionCoarsening(GraphCoarsening):
 	def __cinit__(self, Graph G not None, Partition zeta not None, useGraphBuilder = True):
@@ -54,7 +54,6 @@ cdef class ParallelPartitionCoarsening(GraphCoarsening):
 cdef extern from "cpp/coarsening/MatchingCoarsening.h":
 	cdef cppclass _MatchingCoarsening "NetworKit::MatchingCoarsening"(_GraphCoarsening):
 		_MatchingCoarsening(_Graph, _Matching, bool) except +
-
 
 cdef class MatchingCoarsening(GraphCoarsening):
 	"""Coarsens graph according to a matching.
