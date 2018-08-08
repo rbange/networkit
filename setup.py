@@ -238,6 +238,32 @@ class build_ext(Command):
 			prefix = self.distribution.src_root or os.getcwd()
 		buildNetworKit(prefix)
 
+from distutils.command.clean import clean as _clean
+from distutils.dir_util import remove_tree
+from distutils import log
+class clean(_clean):
+	def run(self):
+		if os.path.exists(buildDirectory):
+			remove_tree(buildDirectory, dry_run=self.dry_run)
+		else:
+			log.warn("'%s' does not exist -- can't clean it", buildDirectory)
+		if shutil.which("cython") is not None:
+			try:
+				os.remove("networkit/_NetworKit.cpp")
+				print('Removed: "networkit/_NetworKit.cpp"')
+			except OSError:
+				pass
+		if self.all:
+			# remove libraries installed in python source tree
+			for fname in os.listdir("."):
+				if fname.startswith("_NetworKit") or fname.startswith("libnetworkit"):
+					try:
+						os.remove(fname)
+						print("Removed: ", fname)
+					except OSError:
+						pass
+		_clean.run(self)
+
 ################################################
 # initialize python setup
 ################################################
@@ -258,7 +284,7 @@ setup(
 	keywords			= version.keywords,
 	platforms			= version.platforms,
 	classifiers			= version.classifiers,
-	cmdclass			= {'build_ext': build_ext},
+	cmdclass			= {'build_ext': build_ext, 'clean': clean},
 	ext_modules			= [Extension('_NetworKit', sources=[])],
 	test_suite			= 'nose.collector',
 	install_requires	= version.install_requires,
